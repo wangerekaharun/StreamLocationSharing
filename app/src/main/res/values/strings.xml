@@ -1,0 +1,13 @@
+<resources>
+  <string name="app_name">StreamReactions</string>
+  <string name="text_sample_message">Sample message text</string>
+  <string name="text_add_reaction">Add a reaction by tapping the images</string>
+  <string name="text_remove_score">-</string>
+  <string name="text_add_score">+</string>
+  <string name="text_score_count">0</string>
+  <string name="text_score_label">Add your score</string>
+  <string name="text_like_label">Like</string>
+  <string name="text_clap_label">Clap</string>
+  <string name="text_save_reaction">Save Reaction</string>
+    <string name="text_go_to_channel">View Channel</string>
+</resources>
