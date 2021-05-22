@@ -3,21 +3,21 @@ object Versions {
     // Androidx
     const val kotlin = "1.5.0"
     const val buildToolsVersion = "4.2"
-    const val appCompat = "1.3.0-rc01"
+    const val appCompat = "1.4.0-alpha01"
     const val constraintLayout = "2.1.0-beta02"
-    const val ktx = "1.6.0-alpha03./"
+    const val ktx = " 1.6.0-beta01"
     const val material = "1.4.0-alpha02"
 
-    //Version codes for all the test libraries
+    // Test Libraries
     const val junit4 = "4.13.1"
-    const val testRunner = "1.3.1-alpha03"
-    const val espresso = "3.4.0-alpha03"
+    const val testRunner = " 1.4.0-beta01"
+    const val espresso = "3.4.0-beta01"
     const val annotation = "1.3.0-alpha01"
 
     // Gradle Plugins
     const val ktlint = "10.0.0"
-    const val detekt = "1.17.0-RC2"
-    const val spotless = "5.12.4"
+    const val detekt = "1.17.1"
+    const val spotless = "5.12.5"
     const val dokka = "1.4.32"
     const val gradleVersionsPlugin = "0.38.0"
     const val jacoco = "0.8.4"
@@ -26,7 +26,7 @@ object Versions {
     const val stream = "4.9.2"
 
     // Fragment
-    const val fragment = "1.3.3"
+    const val fragment = "1.4.0-alpha01"
 }
 
 object BuildPlugins {
@@ -44,7 +44,7 @@ object BuildPlugins {
 }
 
 object Libraries {
-    //Any Library is added here
+    // Core Libs
     const val kotlinStandardLibrary = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}"
     const val appCompat = "androidx.appcompat:appcompat:${Versions.appCompat}"
     const val constraintLayout =
@@ -60,7 +60,6 @@ object Libraries {
 }
 
 object TestLibraries {
-    //any test library is added here
     const val junit4 = "junit:junit:${Versions.junit4}"
     const val testRunner = "androidx.test:runner:${Versions.testRunner}"
     const val espresso = "androidx.test.espresso:espresso-core:${Versions.espresso}"
