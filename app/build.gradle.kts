@@ -10,7 +10,7 @@ android {
 
     compileSdkVersion(AndroidSdk.compileSdkVersion)
     defaultConfig {
-        applicationId = "com.stream.reactions"
+        applicationId = "io.stream.locationsharing"
         minSdkVersion(AndroidSdk.minSdkVersion)
         targetSdkVersion(AndroidSdk.targetSdkVersion)
         versionCode = AndroidSdk.versionCode
@@ -68,6 +68,9 @@ android {
 
         // Fragment
         implementation(Libraries.fragment)
+
+        // Maps
+        implementation(Libraries.maps)
 
         androidTestImplementation(TestLibraries.testRunner)
         androidTestImplementation(TestLibraries.espresso)

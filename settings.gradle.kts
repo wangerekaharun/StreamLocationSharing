@@ -23,4 +23,4 @@ pluginManagement {
     }
 }
 include("app")
-rootProject.name = "StreamReactions"
+rootProject.name = "StreamLocationSharing"

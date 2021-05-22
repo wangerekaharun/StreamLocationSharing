@@ -27,6 +27,9 @@ object Versions {
 
     // Fragment
     const val fragment = "1.4.0-alpha01"
+
+    // Maps
+    const val maps = "17.0.0"
 }
 
 object BuildPlugins {
@@ -57,6 +60,9 @@ object Libraries {
 
     // Fragment
     const val fragment = "androidx.fragment:fragment-ktx:${Versions.fragment}"
+
+    // Maps
+    const val maps = "com.google.android.gms:play-services-maps:${Versions.maps}"
 }
 
 object TestLibraries {
