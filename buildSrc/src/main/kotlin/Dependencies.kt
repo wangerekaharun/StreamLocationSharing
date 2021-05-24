@@ -37,6 +37,9 @@ object Versions {
 
     // Lifecycle
     const val lifecycle = "2.4.0-alpha01"
+
+    // Secrets Gradle Plugin
+    const val secretsPlugin = "0.6"
 }
 
 object BuildPlugins {
@@ -51,6 +54,7 @@ object BuildPlugins {
     const val gradleVersionsPlugin = "com.github.ben-manes.versions"
     const val jacocoAndroid = "com.hiya.jacoco-android"
     const val kapt = "kotlin-kapt"
+    const val secretsPlugin = "com.google.secrets_gradle_plugin"
 }
 
 object Libraries {
@@ -78,6 +82,7 @@ object Libraries {
 
     // Lifecycle
     const val lifecycle = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycle}"
+
 }
 
 object TestLibraries {

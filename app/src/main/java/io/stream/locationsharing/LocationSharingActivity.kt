@@ -15,14 +15,21 @@
  */
 package io.stream.locationsharing
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapView
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.snackbar.Snackbar
 import io.getstream.chat.android.client.ChatClient
 import io.getstream.chat.android.client.api.models.QueryChannelsRequest
@@ -30,35 +37,42 @@ import io.getstream.chat.android.client.api.models.QuerySort
 import io.getstream.chat.android.client.channel.ChannelClient
 import io.getstream.chat.android.client.models.*
 import io.getstream.chat.android.livedata.ChatDomain
+import io.getstream.chat.android.ui.channel.list.viewmodel.ChannelListViewModel
+import io.getstream.chat.android.ui.channel.list.viewmodel.bindView
+import io.getstream.chat.android.ui.channel.list.viewmodel.factory.ChannelListViewModelFactory
+import io.stream.locationsharing.databinding.ActivityChannelsBinding
 import io.stream.locationsharing.databinding.ActivityLocationSharingBinding
 import io.stream.locationsharing.utils.locationFlow
-import io.stream.locationsharing.utils.toast
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
+
 class LocationSharingActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityLocationSharingBinding
+    private lateinit var binding: ActivityChannelsBinding
     private var sentMessage = Message()
     private lateinit var channelClient: ChannelClient
     private var channelId = ""
     private val mFusedLocationClient: FusedLocationProviderClient by lazy {
         LocationServices.getFusedLocationProviderClient(this)
     }
+    private var currentLocation = LatLng(0.0,0.0)
 
 
     @OptIn(InternalCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_location_sharing)
+        setContentView(R.layout.activity_channels)
 
-        binding = ActivityLocationSharingBinding.inflate(layoutInflater)
+        binding = ActivityChannelsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
 
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 mFusedLocationClient.locationFlow().collect {
-                    Log.d("Location", it.longitude.toString())
+                    currentLocation = LatLng(it.latitude, it.longitude)
 
                 }
             }
@@ -70,7 +84,7 @@ class LocationSharingActivity : AppCompatActivity() {
         val user = User(
             id = "tutorial-droid",
             extraData = mutableMapOf(
-                "name" to "Stream Reactions",
+                "name" to "Stream Location",
                 "image" to "https://bit.ly/2TIt8NR",
             ),
         )
@@ -79,48 +93,22 @@ class LocationSharingActivity : AppCompatActivity() {
             token = BuildConfig.TOKEN
         ).enqueue()
 
-        channelClient = client.channel(channelType = "messaging", channelId = "general")
+        val filter = Filters.and(
+            Filters.eq("type", "messaging"),
+            Filters.`in`("members", listOf(user.id)))
 
-        channelClient.create().enqueue { result ->
-            if (result.isSuccess) {
-                val newChannel: Channel = result.data()
-                channelId = newChannel.cid
-                Log.d("Channel", newChannel.name)
-            } else {
-                showSnackBar("Adding channels Failed")
-            }
-        }
-
-        val request = QueryChannelsRequest(
-            filter = Filters.and(
-                Filters.eq("members", listOf("tutorial-droid")),
-            ),
-            offset = 0,
-            limit = 10,
-            querySort = QuerySort.desc("last_message_at")
-        ).apply {
-            watch = true
-            state = true
-        }
-
-        client.queryChannels(request).enqueue { result ->
-            if (result.isSuccess) {
-                val channels: List<Channel> = result.data()
-                Log.d("Channel", channels.toString())
-            } else {
-                showSnackBar("Querying channel Failed")
-            }
+        val viewModelFactory = ChannelListViewModelFactory(filter, ChannelListViewModel.DEFAULT_SORT)
+        val viewModel: ChannelListViewModel by viewModels { viewModelFactory }
+        viewModel.bindView(binding.channelListView, this)
+        binding.channelListView.setChannelItemClickListener { channel ->
+            val intent = Intent(this, ChannelMessagesActivity::class.java)
+            intent.putExtra("channelId", channel.cid)
+            Log.d("channel", channel.messages.size.toString())
+            startActivity(intent)
         }
 
         val message = Message(text = "Sample message text")
 
-        channelClient.sendMessage(message).enqueue { result ->
-            if (result.isSuccess) {
-                sentMessage = result.data()
-            } else {
-                showSnackBar("Adding message Failed")
-            }
-        }
     }
 
     private fun showSnackBar(message: String) {

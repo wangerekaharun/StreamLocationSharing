@@ -4,6 +4,7 @@ plugins {
     id(BuildPlugins.kotlinParcelizePlugin)
     id(BuildPlugins.ktlintPlugin)
     id(BuildPlugins.kapt)
+   // id(BuildPlugins.secretsPlugin) version  Versions.secretsPlugin
 }
 
 android {
