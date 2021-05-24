@@ -30,6 +30,13 @@ object Versions {
 
     // Maps
     const val maps = "17.0.0"
+    const val location = "17.1.0"
+
+    // Coroutines
+    const val coroutines = "1.5.0"
+
+    // Lifecycle
+    const val lifecycle = "2.4.0-alpha01"
 }
 
 object BuildPlugins {
@@ -63,6 +70,14 @@ object Libraries {
 
     // Maps
     const val maps = "com.google.android.gms:play-services-maps:${Versions.maps}"
+    const val locationServices = "com.google.android.gms:play-services-location:${Versions.location}"
+
+    // Coroutines
+    const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}"
+    const val coroutinesAndroid = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}"
+
+    // Lifecycle
+    const val lifecycle = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycle}"
 }
 
 object TestLibraries {

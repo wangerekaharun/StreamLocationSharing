@@ -71,6 +71,14 @@ android {
 
         // Maps
         implementation(Libraries.maps)
+        implementation(Libraries.locationServices)
+
+        // Coroutines
+        implementation(Libraries.coroutines)
+        implementation(Libraries.coroutinesAndroid)
+
+        // Lifecycle
+        implementation(Libraries.lifecycle)
 
         androidTestImplementation(TestLibraries.testRunner)
         androidTestImplementation(TestLibraries.espresso)

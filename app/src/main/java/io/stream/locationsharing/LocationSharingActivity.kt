@@ -18,6 +18,11 @@ package io.stream.locationsharing
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar
 import io.getstream.chat.android.client.ChatClient
 import io.getstream.chat.android.client.api.models.QueryChannelsRequest
@@ -26,19 +31,38 @@ import io.getstream.chat.android.client.channel.ChannelClient
 import io.getstream.chat.android.client.models.*
 import io.getstream.chat.android.livedata.ChatDomain
 import io.stream.locationsharing.databinding.ActivityLocationSharingBinding
+import io.stream.locationsharing.utils.locationFlow
+import io.stream.locationsharing.utils.toast
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class LocationSharingActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLocationSharingBinding
     private var sentMessage = Message()
     private lateinit var channelClient: ChannelClient
     private var channelId = ""
+    private val mFusedLocationClient: FusedLocationProviderClient by lazy {
+        LocationServices.getFusedLocationProviderClient(this)
+    }
 
+
+    @OptIn(InternalCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_location_sharing)
 
         binding = ActivityLocationSharingBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                mFusedLocationClient.locationFlow().collect {
+                    Log.d("Location", it.longitude.toString())
+
+                }
+            }
+        }
 
         val client = ChatClient.Builder("b67pax5b2wdq", applicationContext).build()
         ChatDomain.Builder(client, applicationContext).build()

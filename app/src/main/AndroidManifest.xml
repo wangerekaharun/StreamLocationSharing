@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="io.stream.locationsharing">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,9 +11,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppTheme">
-        <activity
-            android:name="io.stream.locationsharing.ChannelMessagesActivity"
-            android:parentActivityName="io.stream.locationsharing.LocationSharingActivity"/>
 
         <activity android:name="io.stream.locationsharing.LocationSharingActivity">
             <intent-filter>
