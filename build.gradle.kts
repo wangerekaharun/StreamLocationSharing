@@ -9,6 +9,7 @@ plugins {
     id(BuildPlugins.dokkaPlugin) version Versions.dokka
     id(BuildPlugins.gradleVersionsPlugin) version Versions.gradleVersionsPlugin
     id(BuildPlugins.secretsPlugin) version Versions.secretsPlugin
+    id(BuildPlugins.googleServices) apply false
 }
 
 allprojects {

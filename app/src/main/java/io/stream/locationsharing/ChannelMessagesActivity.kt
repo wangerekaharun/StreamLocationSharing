@@ -2,11 +2,17 @@ package io.stream.locationsharing
 
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.util.Log
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.getstream.sdk.chat.viewmodel.MessageInputViewModel
 import com.getstream.sdk.chat.viewmodel.messages.MessageListViewModel
+import com.google.android.gms.maps.model.LatLng
+import io.getstream.chat.android.client.ChatClient
+import io.getstream.chat.android.client.models.Attachment
+import io.getstream.chat.android.client.models.Message
+import io.getstream.chat.android.livedata.ChatDomain
 import io.getstream.chat.android.ui.message.input.MessageInputView
 import io.getstream.chat.android.ui.message.input.MessageInputView.*
 import io.getstream.chat.android.ui.message.input.MessageInputView.InputMode.*
@@ -28,10 +34,14 @@ class ChannelMessagesActivity: AppCompatActivity() {
         val channelId = checkNotNull(intent.getStringExtra("channelId")) {
             "Specifying a channel id is required when starting ChannelActivity"
         }
+
+        Log.d("channelId", channelId)
         val factory = MessageListViewModelFactory(channelId)
         val messageListHeaderViewModel: MessageListHeaderViewModel by viewModels { factory }
         val messageListViewModel: MessageListViewModel by viewModels { factory }
         val messageInputViewModel: MessageInputViewModel by viewModels { factory }
+
+        binding.messageListView.setAttachmentViewFactory(LocationAttachmentViewFactory())
 
 
         // Step 2 - Bind the view and ViewModels, they are loosely coupled so it's easy to customize
@@ -74,5 +84,28 @@ class ChannelMessagesActivity: AppCompatActivity() {
         onBackPressedDispatcher.addCallback(this) {
             backHandler()
         }
+
+        val attachment = Attachment(
+            type = "location",
+            extraData = mutableMapOf("latitude" to "-1.3754604377993476", "longitude" to "36.71737641378712"),
+        )
+        val message = Message(
+            cid = channelId,
+            text = "My current location",
+            attachments = mutableListOf(attachment),
+        )
+
+        ChatClient
+            .instance()
+            .channel(channelId)
+            .sendMessage(message).enqueue { result ->
+                if (result.isSuccess) {
+                    Log.d("MessageSent", result.data().id)
+                } else {
+                    Log.d("MessageSent", result.error().message.toString())
+                }
+
+            }
     }
+
 }

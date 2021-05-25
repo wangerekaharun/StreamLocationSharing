@@ -1,5 +1,6 @@
 package io.stream.locationsharing
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,7 +30,10 @@ class LocationAttachmentViewFactory: AttachmentViewFactory(), OnMapReadyCallback
     ): View {
         val location = data.message.attachments.find { it.type == "location" }
         return if (location != null) {
-            createLocationView(parent, location.extraData["location"] as LatLng)
+            val lat = location.extraData["latitude"] as String
+            val long = location.extraData["longitude"] as String
+            val latLng = LatLng(lat.toDouble(), long.toDouble())
+            createLocationView(parent, latLng)
         } else {
             super.createAttachmentView(data, listeners, style, parent)
         }

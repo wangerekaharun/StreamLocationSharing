@@ -31,6 +31,7 @@ object Versions {
     // Maps
     const val maps = "17.0.0"
     const val location = "17.1.0"
+    const val googleServices = "4.3.3"
 
     // Coroutines
     const val coroutines = "1.5.0"
@@ -55,6 +56,7 @@ object BuildPlugins {
     const val jacocoAndroid = "com.hiya.jacoco-android"
     const val kapt = "kotlin-kapt"
     const val secretsPlugin = "com.google.secrets_gradle_plugin"
+    const val googleServices = "com.google.gms.google-services"
 }
 
 object Libraries {

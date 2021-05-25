@@ -72,13 +72,14 @@ class LocationSharingActivity : AppCompatActivity() {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 mFusedLocationClient.locationFlow().collect {
                     currentLocation = LatLng(it.latitude, it.longitude)
-
                 }
             }
         }
 
         val client = ChatClient.Builder("b67pax5b2wdq", applicationContext).build()
         ChatDomain.Builder(client, applicationContext).build()
+
+        channelClient = client.channel(channelType = "messaging", channelId = "general")
 
         val user = User(
             id = "tutorial-droid",
@@ -106,9 +107,14 @@ class LocationSharingActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        val message = Message(text = "Sample message text")
+        if (currentLocation != null){
+            sendCustomAttachment()
+        }
+
 
     }
+
+
 
     private fun showSnackBar(message: String) {
         Snackbar.make(
@@ -116,5 +122,10 @@ class LocationSharingActivity : AppCompatActivity() {
             message,
             Snackbar.LENGTH_SHORT
         ).show()
+    }
+
+    private fun sendCustomAttachment(){
+
+
     }
 }
