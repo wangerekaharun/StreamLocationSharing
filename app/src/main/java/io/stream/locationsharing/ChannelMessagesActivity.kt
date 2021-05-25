@@ -20,8 +20,8 @@ import io.stream.locationsharing.databinding.ActivityChannelMessagesBinding
 class ChannelMessagesActivity: AppCompatActivity() {
     private lateinit var binding: ActivityChannelMessagesBinding
 
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         binding = ActivityChannelMessagesBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
