@@ -41,7 +41,6 @@ import io.getstream.chat.android.ui.channel.list.viewmodel.ChannelListViewModel
 import io.getstream.chat.android.ui.channel.list.viewmodel.bindView
 import io.getstream.chat.android.ui.channel.list.viewmodel.factory.ChannelListViewModelFactory
 import io.stream.locationsharing.databinding.ActivityChannelsBinding
-import io.stream.locationsharing.databinding.ActivityLocationSharingBinding
 import io.stream.locationsharing.utils.locationFlow
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collect
@@ -90,7 +89,7 @@ class LocationSharingActivity : AppCompatActivity() {
         )
         client.connectUser(
             user = user,
-            token = BuildConfig.TOKEN
+            token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoidHV0b3JpYWwtZHJvaWQifQ.NhEr0hP9W9nwqV7ZkdShxvi02C5PR7SJE7Cs4y7kyqg"
         ).enqueue()
 
         val filter = Filters.and(

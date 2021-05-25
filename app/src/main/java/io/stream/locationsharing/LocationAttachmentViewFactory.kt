@@ -14,7 +14,7 @@ import com.google.android.gms.maps.model.LatLng
 import io.getstream.chat.android.ui.message.list.MessageListItemStyle
 import io.getstream.chat.android.ui.message.list.adapter.MessageListListenerContainer
 import io.getstream.chat.android.ui.message.list.adapter.viewholder.attachment.AttachmentViewFactory
-import io.stream.locationsharing.databinding.ActivityLocationSharingBinding
+import io.stream.locationsharing.databinding.LocationAttachementViewBinding
 
 class LocationAttachmentViewFactory: AttachmentViewFactory(), OnMapReadyCallback {
     private lateinit var mapView: MapView
@@ -38,7 +38,7 @@ class LocationAttachmentViewFactory: AttachmentViewFactory(), OnMapReadyCallback
 
     private fun createLocationView(parent: ViewGroup, location: LatLng): View {
         currentLocation = location
-        val binding = ActivityLocationSharingBinding
+        val binding = LocationAttachementViewBinding
             .inflate(LayoutInflater.from(parent.context), parent, false)
 
         mapView = binding.mapView

@@ -28,7 +28,7 @@ class ChannelMessagesActivity: AppCompatActivity() {
         val channelId = checkNotNull(intent.getStringExtra("channelId")) {
             "Specifying a channel id is required when starting ChannelActivity"
         }
-        val factory = MessageListViewModelFactory("messaging:general")
+        val factory = MessageListViewModelFactory(channelId)
         val messageListHeaderViewModel: MessageListHeaderViewModel by viewModels { factory }
         val messageListViewModel: MessageListViewModel by viewModels { factory }
         val messageInputViewModel: MessageInputViewModel by viewModels { factory }
