@@ -29,7 +29,7 @@ import io.getstream.chat.android.ui.channel.list.viewmodel.factory.ChannelListVi
 import io.stream.locationsharing.databinding.ActivityChannelsBinding
 
 
-class LocationSharingActivity : AppCompatActivity() {
+class ChannelsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityChannelsBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {

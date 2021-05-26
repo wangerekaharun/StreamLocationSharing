@@ -6,8 +6,13 @@ import android.util.Log
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.getstream.sdk.chat.viewmodel.MessageInputViewModel
 import com.getstream.sdk.chat.viewmodel.messages.MessageListViewModel
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
 import io.getstream.chat.android.client.ChatClient
 import io.getstream.chat.android.client.models.Attachment
@@ -22,14 +27,32 @@ import io.getstream.chat.android.ui.message.list.header.viewmodel.bindView
 import io.getstream.chat.android.ui.message.list.viewmodel.bindView
 import io.getstream.chat.android.ui.message.list.viewmodel.factory.MessageListViewModelFactory
 import io.stream.locationsharing.databinding.ActivityChannelMessagesBinding
+import io.stream.locationsharing.utils.locationFlow
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class ChannelMessagesActivity: AppCompatActivity() {
     private lateinit var binding: ActivityChannelMessagesBinding
+    private val mFusedLocationClient: FusedLocationProviderClient by lazy {
+        LocationServices.getFusedLocationProviderClient(this)
+    }
+    private var currentLocation = LatLng(0.0,0.0)
 
+    @OptIn(InternalCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChannelMessagesBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                mFusedLocationClient.locationFlow().collect {
+                    currentLocation = LatLng(it.latitude, it.longitude)
+                }
+            }
+        }
+
 
         val channelId = checkNotNull(intent.getStringExtra("channelId")) {
             "Specifying a channel id is required when starting ChannelActivity"
@@ -87,7 +110,7 @@ class ChannelMessagesActivity: AppCompatActivity() {
 
         val attachment = Attachment(
             type = "location",
-            extraData = mutableMapOf("latitude" to "-1.3754604377993476", "longitude" to "36.71737641378712"),
+            extraData = mutableMapOf("latitude" to currentLocation.latitude, "longitude" to currentLocation.longitude),
         )
         val message = Message(
             cid = channelId,

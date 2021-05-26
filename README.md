@@ -4,19 +4,37 @@
 
 ## Introduction
 
-Stream's Android SDK supports sending custom attachements with messages. In this tutorial you'll learn how to send location as a custom attachment.
+Stream's Android SDK supports sending custom attachements with messages. In this tutorial you'll learn how to send location as a custom attachment. You'll be larning this by building an app that shares your current location on a message.
 
 **Note:** This tutorial assumes you already know the basic knowledge on the Stream API's. To get started checkout the [Android Chat Messaging Tutorial](https://getstream.io/tutorials/android-chat/#kotlin). To get started with sending custom attachements with the Stream Chat SDK checkout the [Creating Custom Attachments on Android](https://getstream.io/blog/android-chat-custom-attachments/) tutorial.
 
+## Getting Current Location
+
+Before you even send your attachment, first you'll need to get the current location of the user. You do this by:
+
+```kotlin
+lifecycleScope.launch {
+    lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+        mFusedLocationClient.locationFlow().collect {
+            currentLocation = LatLng(it.latitude, it.longitude)
+        }
+    }
+}
+```
+
+Here you getting location from <code>FusedLocationProviderClient</code> as a <code>Flow</code> using  the <code>locationFlow()</code> extension method,  You're collectiong the results in a safe way using the <code>Lifecycle></code> methods.
+
+
+
 ## Adding Location as a Custom Attachement
 
-To send add location to your custom attachment, you need to create an <code>Attachment</code> object as shown below.
+Now you have the current user location. To send add location to your custom attachment, you need to create an <code>Attachment</code> object as shown below.
 
 ```Kotlin
 // 1
 val attachment = Attachment(
     type = "location",
-    extraData = mutableMapOf("latitude" to "-1.3754604377993476", "longitude" to "36.71737641378712"),
+    extraData = mutableMapOf("latitude" to currentLocation.latitude, "longitude" to currentLocation.longitude),
 )
 
 // 2

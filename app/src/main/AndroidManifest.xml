@@ -15,9 +15,9 @@
         android:theme="@style/Theme.AppTheme">
 
         <activity android:name=".ChannelMessagesActivity"
-            android:parentActivityName=".LocationSharingActivity"/>
+            android:parentActivityName=".ChannelsActivity"/>
 
-        <activity android:name="io.stream.locationsharing.LocationSharingActivity">
+        <activity android:name="io.stream.locationsharing.ChannelsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
