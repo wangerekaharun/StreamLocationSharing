@@ -49,9 +49,7 @@ import kotlinx.coroutines.launch
 
 class LocationSharingActivity : AppCompatActivity() {
     private lateinit var binding: ActivityChannelsBinding
-    private var sentMessage = Message()
     private lateinit var channelClient: ChannelClient
-    private var channelId = ""
     private val mFusedLocationClient: FusedLocationProviderClient by lazy {
         LocationServices.getFusedLocationProviderClient(this)
     }
@@ -106,12 +104,6 @@ class LocationSharingActivity : AppCompatActivity() {
             Log.d("channel", channel.messages.size.toString())
             startActivity(intent)
         }
-
-        if (currentLocation != null){
-            sendCustomAttachment()
-        }
-
-
     }
 
 
@@ -124,8 +116,4 @@ class LocationSharingActivity : AppCompatActivity() {
         ).show()
     }
 
-    private fun sendCustomAttachment(){
-
-
-    }
 }

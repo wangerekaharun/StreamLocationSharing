@@ -23,10 +23,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/messageListHeaderView" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textAlignment="center"
+        android:padding="6dp"
+        android:background="@android:color/darker_gray"
+        android:text="@string/text_share_current_location"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/messageListView"/>
     <io.getstream.chat.android.ui.message.input.MessageInputView
         android:id="@+id/messageInputView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:streamUiLightningButtonIcon="@drawable/ic_baseline_location_on_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

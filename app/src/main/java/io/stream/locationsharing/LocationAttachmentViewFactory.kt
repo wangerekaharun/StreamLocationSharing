@@ -1,5 +1,6 @@
 package io.stream.locationsharing
 
+import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -46,6 +47,7 @@ class LocationAttachmentViewFactory: AttachmentViewFactory(), OnMapReadyCallback
             .inflate(LayoutInflater.from(parent.context), parent, false)
 
         mapView = binding.mapView
+        mapView.onCreate(Bundle())
         mapView.getMapAsync(this)
 
         return binding.root
