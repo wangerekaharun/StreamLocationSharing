@@ -1,6 +1,6 @@
 <resources>
   <string name="app_name">StreamLocationSharing</string>
   <string name="text_location_description">My current Location</string>
-  <string name="google_maps_key">AIzaSyBfHLm8m5n4tq2ug-sc4Woi2mBJ3Q1vsEU</string>
+  <string name="google_maps_key">""</string>
 
 </resources>
