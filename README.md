@@ -155,13 +155,11 @@ With this, your app is ready to send and also preview custom location attachment
 
 
 
-<img src="/Users/harun/AndroidStudioProjects/StreamLocationSharing/images/app_ui.png" alt="app_ui" style="zoom:50%;" />
+![App Ui](https://github.com/wangerekaharun/StreamLocationSharing/blob/master/images/app_ui.png)
 
 You'll use the menu options to send the user's current location from the app to Stream Android Chat SDK. Once you tap on the location icon at the top right, it sends a message with the text: "My Current location". 
 
-<img src="/Users/harun/AndroidStudioProjects/StreamLocationSharing/images/location_attachment.png" alt="location_attachment" style="zoom:50%;" />
-
-
+![Location Attachment Custom View](https://github.com/wangerekaharun/StreamLocationSharing/blob/master/images/location_attachment.png)
 
 As seen from the image above, the attachment shows a map and <code>TextView</code>. The map shows the location of the coordinates sent as custom attachments.
 
