@@ -1,9 +1,6 @@
 # Location Sharing With Custom Attachments 
 
 
-
-## Introduction
-
 Stream's Android SDK supports sending custom attachements with messages. In this tutorial you'll learn how to send location as a custom attachment. You'll be larning this by building an app that shares your current locationas an attachemnt on a message.
 
 **Note:** This tutorial assumes you already know the basic knowledge of the Stream API. To get started, check out the [Android In-App Messaging Tutorial](https://getstream.io/tutorials/android-chat/), and take a look at the [Android SDK on GitHub](https://github.com/GetStream/stream-chat-android). To get started with sending custom attachements with the Stream Chat SDK checkout the [Creating Custom Attachments on Android](https://getstream.io/blog/android-chat-custom-attachments/) tutorial.
