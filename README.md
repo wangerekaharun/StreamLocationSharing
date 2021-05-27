@@ -4,31 +4,35 @@
 
 ## Introduction
 
-Stream's Android SDK supports sending custom attachements with messages. In this tutorial you'll learn how to send location as a custom attachment. You'll be larning this by building an app that shares your current location on a message.
+Stream's Android SDK supports sending custom attachements with messages. In this tutorial you'll learn how to send location as a custom attachment. You'll be larning this by building an app that shares your current locationas an attachemnt on a message.
 
-**Note:** This tutorial assumes you already know the basic knowledge on the Stream API's. To get started checkout the [Android Chat Messaging Tutorial](https://getstream.io/tutorials/android-chat/#kotlin). To get started with sending custom attachements with the Stream Chat SDK checkout the [Creating Custom Attachments on Android](https://getstream.io/blog/android-chat-custom-attachments/) tutorial.
+**Note:** This tutorial assumes you already know the basic knowledge of the Stream API. To get started, check out the [Android In-App Messaging Tutorial](https://getstream.io/tutorials/android-chat/), and take a look at the [Android SDK on GitHub](https://github.com/GetStream/stream-chat-android). To get started with sending custom attachements with the Stream Chat SDK checkout the [Creating Custom Attachments on Android](https://getstream.io/blog/android-chat-custom-attachments/) tutorial.
 
 ## Getting Current Location
 
-Before you even send your attachment, first you'll need to get the current location of the user. You do this by:
+Before you send your attachment, first you'll need to get the current location of the user. This logic for getting the current location has already been setup for you in the [sample project]((https://github.com/wangerekaharun/StreamLocationSharing)). 
+
+There's the <code>LocationUtils</code> file which has a method with extends the <code>FusedLocationProviderClient</code> class. The extension method returns a <code>callbackFlow</code> with the location data.
+
+To get the location you collect the results on your activity as shown below:
 
 ```kotlin
 lifecycleScope.launch {
     lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-        mFusedLocationClient.locationFlow().collect {
+        fusedLocationClient.locationFlow().collect {
             currentLocation = LatLng(it.latitude, it.longitude)
         }
     }
 }
 ```
 
-Here you getting location from <code>FusedLocationProviderClient</code> as a <code>Flow</code> using  the <code>locationFlow()</code> extension method,  You're collectiong the results in a safe way using the <code>Lifecycle></code> methods.
+Here you getting location from <code>FusedLocationProviderClient</code> as a <code>Flow</code> using  the <code>locationFlow()</code> extension method.  You're collecting the results in a safe way using the <code>Lifecycle></code> methods.
 
-
+Now you have the current user location, in the next section you'll see how to add location coordinates as custom attachements.
 
 ## Adding Location as a Custom Attachement
 
-Now you have the current user location. To send add location to your custom attachment, you need to create an <code>Attachment</code> object as shown below.
+To send add location to your custom attachment, you need to create an <code>Attachment</code> object as shown below.
 
 ```Kotlin
 // 1
@@ -47,7 +51,7 @@ val message = Message(
 
 To explan what the code above does:
 
-1. Here, you're creating an attachement with the <code>location</code> key which you'll use later to retrieve this data. You're also passing the latitude and longitude for your location as extra data which you'll be retreiving later on.
+1. Here, you're creating an attachement with the <code>location</code> key which you'll use later to retrieve this data. You're also passing the latitude and longitude from your location coordinates as extra data which you'll be retreiving later on.
 2. You add your location attachment to your message on the <code>attachments</code> property.
 
 
@@ -136,12 +140,12 @@ class LocationAttachmentViewFactory: AttachmentViewFactory(), OnMapReadyCallback
 
 Here's a breakdown of the code above:
 
-1. This are top level variables for your map view, google map and location that you get from the attachement.
-2. This the method responsible for rendering your custom attachement UI
-3. Here, you're getting the location data that you passed on your message using the <code>location</code>key that you defined earlier.
+1. This are top level variables for your <code>MapView</code>, <code>GoogleMap</code> and a <code>LatLng</code> object for location that you get from the attachement.
+2. This the method responsible for rendering your custom attachement UI. In this method, you only need to change the UI for attachements that have location. The other attachments remain unchanged.
+3. Here, you're getting the location data that you passed on your message using the <code>location</code>key that you defined earlier. There'
 4. You're calling the <code>createLocationView</code> which is responsible for inflating the view.
-5.  Here you're initializing the <code>mapView</code> and also calling the <code>getMapAsync()</code>
-6. Youre overriding the <code>oNMapReady</code> method which is called when the map is loaded. In this method you update the map to show the location you added on your attachment.
+5.  Here you're initializing the <code>mapView</code> and also calling the <code>getMapAsync()</code> which sets a callback object which will be triggered when the GoogleMap instance is ready to be used by our class.
+6. Youre overriding the <code>onMapReady</code> method which is called when the map is ready to be used. In this method you update the map to show the location you added on your attachment.
 
 With the custom factory set, you now need to notify the <code>MessageListView</code> of the <code>LocationAttachmentViewFactory</code>. You do this as shown in the code below:
 
@@ -151,9 +155,13 @@ binding.messageListView.setAttachmentViewFactory(LocationAttachmentViewFactory()
 
 Here's you're adding the attachment view factory to the MessageListView.
 
-With this, your app is ready to send and also preview custom location attachement.
+With this, your app is ready to send and also preview custom location attachement. For the project, the action button for sending the location is on the options menu as shown in the image below.
 
 
+
+<img src="/Users/harun/AndroidStudioProjects/StreamLocationSharing/images/app_ui.png" alt="app_ui" style="zoom:50%;" />
+
+You'll use the menu options to send the user's current location from the app to Stream Android Chat SDK. Once you tap on the location icon at the top right, it sends a message with the text: "My Current location". 
 
 <img src="/Users/harun/AndroidStudioProjects/StreamLocationSharing/images/location_attachment.png" alt="location_attachment" style="zoom:50%;" />
 
@@ -164,6 +172,8 @@ As seen from the image above, the attachmennt shows a map and a text. The map sh
 ## Conclusion
 
 You've seen how easy it is to add location as custom attachment. You can now enrich your chat with location sharing. You can even go a step further to add features such as live location sharing or current location sharing as the Stream Android SDK supports custom attachments.
+
+You can learn more about the Android SDK by checking out its [GitHub repository](https://github.com/GetStream/stream-chat-android), and by taking a look at [the documentation](https://getstream.io/chat/docs/android/?language=kotlin). You can also go through the [Message List View Custom Attachments]https://getstream.io/chat/docs/android/message_list_view/?language=kotlin&q=AttachmentViewFactory#customizations) sections that explains more about custom attachments.
 
 You can get the full sample project with examples in this tutorial [here](https://github.com/wangerekaharun/StreamLocationSharing).
 

@@ -45,9 +45,17 @@ android {
         com.android.build.gradle.internal.cxx.configure.gradleLocalProperties(rootDir)
             .getProperty("TOKEN")
 
+    val googleMapsKey: String? =
+        com.android.build.gradle.internal.cxx.configure.gradleLocalProperties(rootDir)
+            .getProperty("googleMapsKey")
+
     buildTypes {
         this.forEach {
             it.buildConfigField("String", "TOKEN", TOKEN.toString())
+        }
+
+        this.forEach {
+            it.resValue("string", "googleMapsKey", googleMapsKey.toString())
         }
 
         getByName("release") {

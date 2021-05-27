@@ -15,10 +15,22 @@
  */
 package io.stream.locationsharing
 
+import android.Manifest
 import android.content.Intent
+import android.content.IntentSender
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.LocationSettingsRequest
+import com.google.android.gms.location.LocationSettingsResponse
+import com.google.android.gms.location.SettingsClient
+import com.google.android.gms.tasks.Task
 import io.getstream.chat.android.client.ChatClient
 import io.getstream.chat.android.client.models.Filters
 import io.getstream.chat.android.client.models.User
@@ -27,14 +39,24 @@ import io.getstream.chat.android.ui.channel.list.viewmodel.ChannelListViewModel
 import io.getstream.chat.android.ui.channel.list.viewmodel.bindView
 import io.getstream.chat.android.ui.channel.list.viewmodel.factory.ChannelListViewModelFactory
 import io.stream.locationsharing.databinding.ActivityChannelsBinding
+import io.stream.locationsharing.utils.createLocationRequest
 
 
 class ChannelsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityChannelsBinding
+    lateinit var locationSettingsClient: LocationSettingsRequest
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_channels)
+
+        val locationClient: SettingsClient = LocationServices.getSettingsClient(this)
+        buildLocationSettingsRequest()
+        checkLocationSettings(locationClient)
+
+        if (!isPermissionGranted()){
+            requestPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        }
 
         binding = ActivityChannelsBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -68,4 +90,43 @@ class ChannelsActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
+
+    private fun buildLocationSettingsRequest() {
+        val builder = LocationSettingsRequest.Builder()
+        builder.addLocationRequest(createLocationRequest())
+        locationSettingsClient = builder.build()
+    }
+
+    private fun checkLocationSettings(
+        locationClient: SettingsClient
+    ) {
+        locationClient.checkLocationSettings(locationSettingsClient)
+            .addOnFailureListener { exception ->
+            if (exception is ResolvableApiException) {
+                try {
+                    exception.startResolutionForResult(
+                        this,
+                        201
+                    )
+                } catch (sendEx: IntentSender.SendIntentException) {
+                    Log.e("SettingsError", sendEx.message.toString())
+                }
+            }
+        }
+    }
+
+    private fun isPermissionGranted() : Boolean {
+        return ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private val requestPermission =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                Log.i("Permission", "permission granted")
+            } else {
+                Log.i("Permission", "permission denied")
+            }
+        }
 }

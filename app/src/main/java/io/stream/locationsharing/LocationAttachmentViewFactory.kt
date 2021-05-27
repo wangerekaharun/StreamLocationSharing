@@ -31,9 +31,9 @@ class LocationAttachmentViewFactory: AttachmentViewFactory(), OnMapReadyCallback
     ): View {
         val location = data.message.attachments.find { it.type == "location" }
         return if (location != null) {
-            val lat = location.extraData["latitude"] as String
-            val long = location.extraData["longitude"] as String
-            val latLng = LatLng(lat.toDouble(), long.toDouble())
+            val lat = location.extraData["latitude"] as Double
+            val long = location.extraData["longitude"] as Double
+            val latLng = LatLng(lat, long)
             createLocationView(parent, latLng)
         } else {
             super.createAttachmentView(data, listeners, style, parent)
@@ -55,7 +55,7 @@ class LocationAttachmentViewFactory: AttachmentViewFactory(), OnMapReadyCallback
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
-        map.setMinZoomPreference(12f)
+        map.setMinZoomPreference(18f)
         map.moveCamera(CameraUpdateFactory.newLatLng(currentLocation))
     }
 }
