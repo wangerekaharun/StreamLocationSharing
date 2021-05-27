@@ -170,7 +170,7 @@ As seen from the image above, the attachment shows a map and <code>TextView</cod
 
 You've seen how easy it is to add a location as a custom attachment. You can now enrich your chat with location sharing. You can even go a step further to add features such as live location sharing or current location sharing as the Stream Android SDK supports custom attachments.
 
-You can learn more about the Android SDK by checking out its [GitHub repository](https://github.com/GetStream/stream-chat-android), and by taking a look at [the documentation](https://getstream.io/chat/docs/android/?language=kotlin). You can also go through the [Message List View Custom Attachments]https://getstream.io/chat/docs/android/message_list_view/?language=kotlin&q=AttachmentViewFactory#customizations) sections that explain more about custom attachments.
+You can learn more about the Android SDK by checking out its [GitHub repository](https://github.com/GetStream/stream-chat-android), and by taking a look at [the documentation](https://getstream.io/chat/docs/android/?language=kotlin). You can also go through the [Message List View Custom Attachments](https://getstream.io/chat/docs/android/message_list_view/?language=kotlin&q=AttachmentViewFactory#customizations) sections that explain more about custom attachments.
 
 You can get the full sample project with examples in this tutorial [here](https://github.com/wangerekaharun/StreamLocationSharing).
 
