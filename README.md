@@ -162,10 +162,10 @@ class LocationAttachmentViewFactory(
 
 Here's a breakdown of the code above:
 
-2. This the method responsible for rendering your custom attachment UI. In this method, you only need to change the UI for attachments that have a location. The other attachments remain unchanged.
-3. Here, you're getting the location data that you passed on your message using the <code>location</code>key that you defined earlier. 
-4. You're calling the <code>createLocationView</code> which is responsible for inflating the view.
-5.  Here you're initializing the <code>mapView</code>. 
+1. This the method responsible for rendering your custom attachment UI. In this method, you only need to change the UI for attachments that have a location. The other attachments remain unchanged.
+2. Here, you're getting the location data that you passed on your message using the <code>location</code>key that you defined earlier. 
+3. You're calling the <code>createLocationView</code> which is responsible for inflating the view.
+4.  Here you're initializing the <code>mapView</code>. 
 5. You're calling the <code>getMapAsync()</code> . This method sets a callback object which is triggered when the GoogleMap instance is ready for use.  You're also updating the map with the zoom and updating the map to show the location you added to your attachment.
 6. You're adding a <code>LifecycleObserver</code>. This is for calling the different <code>MapView</code> life cycle methods depending on the lifecycle state of <code>LocationAttachmentViewFactory</code> . For example you're supposed to destoy the <code>MapView</code> when the view has been destoyed.  You achieve this by calling <code>mapView.onDestroy()</code> when you receive the <code>ON_DESTROY</code> lifecycle event.
 
