@@ -58,23 +58,22 @@ class LocationAttachmentViewFactory(
         lifecycleOwner.lifecycle.addObserver(object : LifecycleObserver {
             @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
             fun destroyMapView(){
-                Log.d("LifecycleState","Yes we are detached")
                 mapView.onDestroy()
             }
 
             @OnLifecycleEvent(Lifecycle.Event.ON_START)
             fun startMapView(){
-                Log.d("LifecycleState","Yes we are started")
+               mapView.onStart()
             }
 
             @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
             fun resumeMapView(){
-                Log.d("LifecycleState","Yes we are resumed")
+                mapView.onResume()
             }
 
             @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
             fun stopMapView(){
-                Log.d("LifecycleState","Yes we are stopped")
+                mapView.onStop()
             }
         })
 
