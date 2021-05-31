@@ -28,9 +28,7 @@ import androidx.core.content.ContextCompat
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.LocationSettingsRequest
-import com.google.android.gms.location.LocationSettingsResponse
 import com.google.android.gms.location.SettingsClient
-import com.google.android.gms.tasks.Task
 import io.getstream.chat.android.client.ChatClient
 import io.getstream.chat.android.client.models.Filters
 import io.getstream.chat.android.client.models.User
@@ -40,7 +38,6 @@ import io.getstream.chat.android.ui.channel.list.viewmodel.bindView
 import io.getstream.chat.android.ui.channel.list.viewmodel.factory.ChannelListViewModelFactory
 import io.stream.locationsharing.databinding.ActivityChannelsBinding
 import io.stream.locationsharing.utils.createLocationRequest
-
 
 class ChannelsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityChannelsBinding

@@ -15,7 +15,7 @@ object Versions {
     const val annotation = "1.3.0-alpha01"
 
     // Gradle Plugins
-    const val ktlint = "10.0.0"
+    const val ktlint = "9.1.1"
     const val detekt = "1.17.1"
     const val spotless = "5.12.5"
     const val dokka = "1.4.32"

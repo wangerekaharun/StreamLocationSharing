@@ -95,71 +95,87 @@ The layout has a <code>MapView</code> for displaying the location on the map.
 Next you'll create the <code>LocationAttachmentViewFactory</code> which overrides <code>AttachmentViewFactory</code> . This is how the class looks like:
 
 ```kotlin
-class LocationAttachmentViewFactory: AttachmentViewFactory(), OnMapReadyCallback {
+class LocationAttachmentViewFactory(
+    private val lifecycleOwner: LifecycleOwner
+): AttachmentViewFactory() {
     // 1
-    private lateinit var mapView: MapView
-    private lateinit var map: GoogleMap
-    private var currentLocation = LatLng(0.0,0.0)
-
-    // 2 
-  	override fun createAttachmentView(
+    override fun createAttachmentView(
         data: MessageListItem.MessageItem,
         listeners: MessageListListenerContainer,
         style: MessageListItemStyle,
         parent: ViewGroup
     ): View {
-      // 3
+        // 2
         val location = data.message.attachments.find { it.type == "location" }
         return if (location != null) {
-            val lat = location.extraData["latitude"] as String
-            val long = location.extraData["longitude"] as String
-            val latLng = LatLng(lat.toDouble(), long.toDouble())
-            // 4
-            createLocationView(parent, latLng)
+            val lat = location.extraData["latitude"] as Double
+            val long = location.extraData["longitude"] as Double
+            val latLng = LatLng(lat, long)
+            // 3
+          	createLocationView(parent, latLng)
         } else {
             super.createAttachmentView(data, listeners, style, parent)
         }
-
     }
 
     private fun createLocationView(parent: ViewGroup, location: LatLng): View {
-        currentLocation = location
         val binding = LocationAttachementViewBinding
             .inflate(LayoutInflater.from(parent.context), parent, false)
 
-        // 5
-        mapView = binding.mapView
+        // 4
+      	val mapView = binding.mapView
         mapView.onCreate(Bundle())
-        mapView.getMapAsync(this)
+      	// 5
+        mapView.getMapAsync { googleMap ->
+            googleMap.setMinZoomPreference(18f)
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(location))
+        }
+
+        // 6
+      	lifecycleOwner.lifecycle.addObserver(object : LifecycleObserver {
+            @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+            fun destroyMapView(){
+                mapView.onDestroy()
+            }
+
+            @OnLifecycleEvent(Lifecycle.Event.ON_START)
+            fun startMapView(){
+               mapView.onStart()
+            }
+
+            @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+            fun resumeMapView(){
+                mapView.onResume()
+            }
+
+            @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+            fun stopMapView(){
+                mapView.onStop()
+            }
+        })
 
         return binding.root
     }
 
-    // 6
-  	override fun onMapReady(googleMap: GoogleMap) {
-        map = googleMap
-        map.setMinZoomPreference(12f)
-        map.moveCamera(CameraUpdateFactory.newLatLng(currentLocation))
-    }
 }
 ```
 
 Here's a breakdown of the code above:
 
-1. This are top level variables for your <code>MapView</code>, <code>GoogleMap</code> and a <code>LatLng</code> object for location that you get from the attachement.
 2. This the method responsible for rendering your custom attachment UI. In this method, you only need to change the UI for attachments that have a location. The other attachments remain unchanged.
 3. Here, you're getting the location data that you passed on your message using the <code>location</code>key that you defined earlier. 
 4. You're calling the <code>createLocationView</code> which is responsible for inflating the view.
-5.  Here you're initializing the <code>mapView</code>. You're also calling the <code>getMapAsync()</code> . This method sets a callback object which is triggered when the GoogleMap instance is ready for use.
-6. You're overriding the <code>onMapReady</code> method which is called when the map is ready to be used. In this method you update the map to show the location you added to your attachment.
+5.  Here you're initializing the <code>mapView</code>. 
+5. You're calling the <code>getMapAsync()</code> . This method sets a callback object which is triggered when the GoogleMap instance is ready for use.  You're also updating the map with the zoom and updating the map to show the location you added to your attachment.
+6. You're adding a <code>LifecycleObserver</code>. This is for calling the different <code>MapView</code> life cycle methods depending on the lifecycle state of <code>LocationAttachmentViewFactory</code> . For example you're supposed to destoy the <code>MapView</code> when the view has been destoyed.  You achieve this by calling <code>mapView.onDestroy()</code> when you receive the <code>ON_DESTROY</code> lifecycle event.
 
 With the custom factory set, you now need to notify the <code>MessageListView</code> of the <code>LocationAttachmentViewFactory</code>. You do this as shown in the code below:
 
 ```kotlin
-binding.messageListView.setAttachmentViewFactory(LocationAttachmentViewFactory())
+binding.messageListView.setAttachmentViewFactory(LocationAttachmentViewFactory(lifecycleOwner = this))
 ```
 
-Here's you're adding the attachment view factory to the MessageListView.
+Here's you're adding the attachment view factory to the MessageListView. You also pass the activity context as the <code>lifecycleOwner</code> for the <code>LocationAttachmentViewFactory</code> . This hooks it with the life cycle of the activity.
 
 With this, your app is ready to send and also preview custom location attachments. For the project, the action button for sending the location is on the options menu as shown in the image below.
 
