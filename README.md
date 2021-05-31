@@ -27,7 +27,7 @@ Here, you're getting location from <code>FusedLocationProviderClient</code> as a
 
 You now have the user's current location. In the next section, you'll see how to add location coordinates as custom attachments.
 
-**Note:** To be able to access location or load a map, you'll need to have your project on the Google Maps Platform console. From the console you can get an API Key for your app which enable your app to access all location and map functionalities. Read more about this on the [official documentation](https://developers.google.com/maps/documentation/android-sdk/start#create-project).
+**Note:** To be able to access location or load a map, you'll need to have your project on the Google Maps Platform console. From the console, you can get an API Key for your app which enables your app to access all location and map functionalities. Read more about this on the [official documentation](https://developers.google.com/maps/documentation/android-sdk/start#create-project).
 
 Once you have the API Key, you can add it on the <code>local.properties</code> file as:
 
@@ -35,7 +35,7 @@ Once you have the API Key, you can add it on the <code>local.properties</code> f
 googleMapsKey="YOUR_API_KEY"
 ```
 
-With this the project will be able to load the map and use all the map based functionalities.
+With this, the project will be able to load the map and use all the map-based functionalities.
 
 ## Adding Location as a Custom Attachments
 
