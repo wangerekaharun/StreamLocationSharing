@@ -24,15 +24,9 @@ import io.getstream.chat.android.ui.message.list.adapter.MessageListListenerCont
 import io.getstream.chat.android.ui.message.list.adapter.viewholder.attachment.AttachmentViewFactory
 import io.stream.locationsharing.databinding.LocationAttachementViewBinding
 
-class LocationAttachmentViewFactory(lifecycleOwner: LifecycleOwner): AttachmentViewFactory(), OnMapReadyCallback, LifecycleObserver {
-    private lateinit var mapView: MapView
-    private lateinit var map: GoogleMap
-    private var currentLocation = LatLng(0.0,0.0)
-
-    init {
-        lifecycleOwner.lifecycle.addObserver(this)
-    }
-
+class LocationAttachmentViewFactory(
+    private val lifecycleOwner: LifecycleOwner
+): AttachmentViewFactory() {
     override fun createAttachmentView(
         data: MessageListItem.MessageItem,
         listeners: MessageListListenerContainer,
@@ -51,41 +45,40 @@ class LocationAttachmentViewFactory(lifecycleOwner: LifecycleOwner): AttachmentV
     }
 
     private fun createLocationView(parent: ViewGroup, location: LatLng): View {
-        currentLocation = location
         val binding = LocationAttachementViewBinding
             .inflate(LayoutInflater.from(parent.context), parent, false)
 
-        mapView = binding.mapView
+        val mapView = binding.mapView
         mapView.onCreate(Bundle())
-        mapView.getMapAsync(this)
+        mapView.getMapAsync { googleMap ->
+            googleMap.setMinZoomPreference(18f)
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(location))
+        }
+
+        lifecycleOwner.lifecycle.addObserver(object : LifecycleObserver {
+            @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+            fun destroyMapView(){
+                Log.d("LifecycleState","Yes we are detached")
+                mapView.onDestroy()
+            }
+
+            @OnLifecycleEvent(Lifecycle.Event.ON_START)
+            fun startMapView(){
+                Log.d("LifecycleState","Yes we are started")
+            }
+
+            @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+            fun resumeMapView(){
+                Log.d("LifecycleState","Yes we are resumed")
+            }
+
+            @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+            fun stopMapView(){
+                Log.d("LifecycleState","Yes we are stopped")
+            }
+        })
 
         return binding.root
-    }
-
-    override fun onMapReady(googleMap: GoogleMap) {
-        map = googleMap
-        map.setMinZoomPreference(18f)
-        map.moveCamera(CameraUpdateFactory.newLatLng(currentLocation))
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    fun destroyMapView(){
-        Log.d("LifecycleState","Yes we are detached")
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
-    fun startMapView(){
-        Log.d("LifecycleState","Yes we are started")
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    fun resumeMapView(){
-        Log.d("LifecycleState","Yes we are resumed")
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    fun stopMapView(){
-        Log.d("LifecycleState","Yes we are stopped")
     }
 
 }
