@@ -63,7 +63,7 @@ class ChannelMessagesActivity: AppCompatActivity() {
         val messageListViewModel: MessageListViewModel by viewModels { factory }
         val messageInputViewModel: MessageInputViewModel by viewModels { factory }
 
-        binding.messageListView.setAttachmentViewFactory(LocationAttachmentViewFactory())
+        binding.messageListView.setAttachmentViewFactory(LocationAttachmentViewFactory(lifecycleOwner = this))
 
 
         // Step 2 - Bind the view and ViewModels, they are loosely coupled so it's easy to customize
